@@ -132,7 +132,7 @@ def weather_data():
         df = pd.read_csv('backend/weather.csv')
         df.dropna(inplace=True)
         df = df[df['Temperature'] < 70]
-        X = df[['Humidity', 'Pressure', 'Wind']]
+        X = df[['Humidity', 'Precipitation', 'Wind']]
         y = df['Temperature']
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(X)
