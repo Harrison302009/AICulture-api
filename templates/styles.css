@@ -1,0 +1,8 @@
+.headings {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: linear-gradient(135deg, #013901, #fdff81);
+}

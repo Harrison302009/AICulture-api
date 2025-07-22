@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Login - AICulture</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            /* A vibrant, natural green */
+            --primary-hover-color: #45a049;
+            --secondary-color: #f4f4f4;
+            --dark-color: #333;
+            --light-color: #fff;
+            --text-color: #555;
+            --font-family: 'Montserrat', sans-serif;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --input-border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--text-color);
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .login-container {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            background: var(--light-color);
+            box-shadow: var(--shadow);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .login-image {
+            flex: 1;
+            background: url('https://images.unsplash.com/photo-1492496913980-501348b61469?q=80&w=1974') no-repeat center center/cover;
+            position: relative;
+            color: var(--light-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 3rem;
+        }
+
+        .login-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.1));
+        }
+
+        .login-image-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-image-content h2 {
+            font-size: 2rem;
+            color: var(--light-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-form {
+            flex: 1;
+            padding: 3rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form h1 {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .login-form h1 .fa-leaf {
+            color: var(--primary-color);
+        }
+
+        .login-form p {
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            transition: color 0.3s ease;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid var(--input-border-color);
+            border-radius: 8px;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .input-group input:focus+i {
+            color: var(--primary-color);
+        }
+
+        .input-group .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: var(--light-color);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn-login:hover {
+            background: var(--primary-hover-color);
+        }
+
+        .login-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .login-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .login-links a:hover {
+            text-decoration: underline;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 400px;
+                margin: 2rem;
+            }
+
+            .login-image {
+                min-height: 200px;
+                padding: 2rem;
+            }
+
+            .login-form {
+                padding: 2rem;
+            }
+        }
+    </style>
+    <script>
+        async function SignInValidation(event) {
+            event.preventDefault()
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            fetch('/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (response.status === 200) {
+                        console.log("User logging in");
+                        window.location.href = "{{ url_for('dashboard') }}";
+                    } else {
+                        document.getElementById('error-message').innerText = data.message || "Invalid credentials";
+                        console.error("Error:", data.message);
+                    }
+                })
+                .catch(err => console.error("Network error:", err));
+
+        }
+    </script>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-image">
+            <div class="login-image-content">
+                <h2>Welcome Back to AICulture</h2>
+                <p>Your partner in modern, sustainable farming.</p>
+            </div>
+        </div>
+        <div class="login-form">
+            <h1>Login to AICulture <i class="fa-solid fa-leaf"></i></h1>
+            <p>Enter your credentials to access your dashboard.</p>
+            <form action="#" method="post" onsubmit="SignInValidation(event)">
+                <div class="input-group">
+                    <input type="email" id="email" name="email" placeholder="Email Address" required>
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    <i class="fa-solid fa-lock"></i>
+                    <span class="toggle-password"><i class="fa-solid fa-eye"></i></span>
+                </div>
+                <p id="error-message" style="color: red;"></p>
+                <div class="login-links">
+                    <label>
+                        <input type="checkbox" name="remember"> Remember me
+                    </label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn-login">Login</button>
+                <p class="signup-link">Don't have an account? <a href="{{url_for('signup_page')}}">Sign Up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const togglePassword = document.querySelector('.toggle-password');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            // Change the eye icon
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+    </script>
+
+</body>
+
+</html>

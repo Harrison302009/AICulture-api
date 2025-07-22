@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Sign Up - AICulture</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-hover-color: #45a049;
+            --secondary-color: #f4f4f4;
+            --dark-color: #333;
+            --light-color: #fff;
+            --text-color: #555;
+            --font-family: 'Montserrat', sans-serif;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --input-border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--text-color);
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .signup-container {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            background: var(--light-color);
+            box-shadow: var(--shadow);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .signup-image {
+            flex: 1;
+            background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932') no-repeat center center/cover;
+            position: relative;
+            color: var(--light-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 3rem;
+        }
+
+        .signup-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.1));
+        }
+
+        .signup-image-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .signup-image-content h2 {
+            font-size: 2rem;
+            color: var(--light-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .signup-form {
+            flex: 1;
+            padding: 3rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .signup-form h1 {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .signup-form h1 .fa-leaf {
+            color: var(--primary-color);
+        }
+
+        .signup-form p {
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            transition: color 0.3s ease;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid var(--input-border-color);
+            border-radius: 8px;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .input-group input:focus+i {
+            color: var(--primary-color);
+        }
+
+        .input-group .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .btn-signup {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: var(--light-color);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn-signup:hover {
+            background: var(--primary-hover-color);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .signup-container {
+                flex-direction: column;
+                max-width: 400px;
+                margin: 2rem;
+            }
+
+            .signup-image {
+                min-height: 200px;
+                padding: 2rem;
+            }
+
+            .signup-form {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="signup-container">
+        <div class="signup-image">
+            <div class="signup-image-content">
+                <h2>Join AICulture</h2>
+                <p>Start your journey towards intelligent, data-driven farming today.</p>
+            </div>
+        </div>
+        <div class="signup-form">
+            <h1>Create Your Account <i class="fa-solid fa-leaf"></i></h1>
+            <p>Get started with just a few details.</p>
+            <form id="signupForm" action="#" method="post" onsubmit="SignUpValidation(event)">
+                <div class="input-group">
+                    <input type="text" id="name" name="name" placeholder="Full Name" required>
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="email" name="email" placeholder="Email Address" required>
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" name="password" placeholder="Password" required minlength="8">
+                    <i class="fa-solid fa-lock"></i>
+                    <span class="toggle-password"><i class="fa-solid fa-eye"></i></span>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required minlength="8">
+                    <i class="fa-solid fa-lock"></i>
+                    <span class="toggle-password"><i class="fa-solid fa-eye"></i></span>
+                </div>
+                <p id="error-message" style="color: red; text-align: center; margin-bottom: 1rem;"></p>
+                <button type="submit" class="btn-signup">Create Account</button>
+                <p class="login-link">Already have an account? <a href="{{url_for('login')}}">Log In</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.toggle-password').forEach(toggle => {
+                toggle.addEventListener('click', function () {
+                    const inputGroup = this.closest('.input-group');
+                    const passwordInput = inputGroup.querySelector('input');
+                    if (passwordInput) {
+                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordInput.setAttribute('type', type);
+                        this.querySelector('i').classList.toggle('fa-eye');
+                        this.querySelector('i').classList.toggle('fa-eye-slash');
+                    }
+                });
+            });
+        });
+
+        async function SignUpValidation(event) {
+            event.preventDefault();
+            const errorMessageEl = document.getElementById('error-message');
+            errorMessageEl.innerText = '';
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirm_password = document.getElementById('confirm_password').value;
+
+            if (password !== confirm_password) {
+                errorMessageEl.innerText = "Passwords do not match.";
+                return;
+            }
+            if (password.length < 8) {
+                errorMessageEl.innerText = "Password must be at least 8 characters long.";
+                return;
+            }
+
+            fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            })
+            .then(async (response) => {
+                const data = await response.json();
+                if (response.status === 201 || response.status === 200) {
+                    console.log("User signed up successfully");
+                    window.location.href = "{{ url_for('dashboard') }}"; 
+                } else {
+                    errorMessageEl.innerText = data.message || "An error occurred during signup.";
+                    console.error("Error:", data.message);
+                }
+            })
+            .catch(err => {
+                errorMessageEl.innerText = "Network error. Please try again.";
+                console.error("Network error:", err);
+            });
+        }
+    </script>
+
+</body>
+
+</html>

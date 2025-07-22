@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Dashboard - AICulture</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            /* A vibrant, natural green */
+            --primary-hover-color: #45a049;
+            --secondary-color: #f4f4f4;
+            --dark-color: #333;
+            --light-color: #fff;
+            --text-color: #555;
+            --sidebar-bg: #2c3e50;
+            --sidebar-text: #ecf0f1;
+            --sidebar-active-bg: #34495e;
+            --font-family: 'Montserrat', sans-serif;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-bottom: 1px solid #34495e;
+        }
+
+        .sidebar-header .logo-icon {
+            color: var(--primary-color);
+        }
+
+        .sidebar.collapsed .logo-text {
+            display: none;
+        }
+
+        .sidebar-nav {
+            flex-grow: 1;
+            list-style: none;
+            padding-top: 1rem;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            transition: background 0.2s ease, padding-left 0.3s ease;
+        }
+
+        .sidebar-nav li a.active,
+        .sidebar-nav li a:hover {
+            background: var(--sidebar-active-bg);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .sidebar-nav li a.active {
+            padding-left: calc(1.5rem - 4px);
+        }
+
+        .sidebar-nav i {
+            font-size: 1.2rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        .sidebar-nav .nav-text {
+            margin-left: 1rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #34495e;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .main-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .toggle-sidebar {
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--dark-color);
+            margin-right: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile .fa-bell {
+            font-size: 1.2rem;
+        }
+
+        .user-profile .user-name {
+            font-weight: 600;
+        }
+
+        /* --- Widgets --- */
+        .widgets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .widget {
+            background: var(--light-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .widget:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .widget-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .widget-header i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: #e8f5e9;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+        }
+
+        .widget-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .widget-content .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .widget-content .label {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .chart-widget {
+            grid-column: 1 / -1;
+            /* Make chart span full width */
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: absolute;
+                z-index: 1000;
+                height: 100%;
+                box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+            }
+
+            .sidebar:not(.collapsed) {
+                width: 260px;
+            }
+
+            .sidebar.collapsed {
+                width: 0;
+                overflow: hidden;
+                padding: 0;
+                border: none;
+            }
+            
+            .main-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-leaf logo-icon"></i>
+                <span class="logo-text">AICulture</span>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#" class="active"><i class="fa-solid fa-tachometer-alt"></i><span class="nav-text">Dashboard</span></a></li>
+                <li><a href="{{url_for('crop_monitor')}}"><i class="fa-solid fa-seedling"></i><span class="nav-text">Crop Monitoring</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-cloud-sun-rain"></i><span class="nav-text">Weather</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-tractor"></i><span class="nav-text">My Farm</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-chart-bar"></i><span class="nav-text">Analytics</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-cog"></i><span class="nav-text">Settings</span></a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="{{ url_for('logout') }}" class="sidebar-nav-item"><i class="fa-solid fa-right-from-bracket"></i><span class="nav-text">Logout</span></a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <div style="display: flex; align-items: center;">
+                    <button class="toggle-sidebar" id="toggle-sidebar-btn"><i class="fa-solid fa-bars"></i></button>
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="user-profile">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="user-name">Welcome, {{ name }}</span>
+                    <i class="fa-solid fa-user-circle" style="font-size: 2rem;"></i>
+                </div>
+            </header>
+
+            <div class="widgets-grid">
+                <div class="widget">
+                    <div class="widget-header">
+                        <i class="fa-solid fa-cloud-sun"></i>
+                        <h3>Current Weather</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="value" onclick="window.location.href = '/weather_data'">{{temperature}}°C</div>
+                        <div class="label">Sunny with light clouds</div>
+                    </div>
+                </div>
+                <div class="widget">
+                    <div class="widget-header">
+                        <i class="fa-solid fa-droplet"></i>
+                        <h3>Soil Moisture</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="value">68%</div>
+                        <div class="label">Optimal</div>
+                    </div>
+                </div>
+                <div class="widget">
+                    <div class="widget-header">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                        <h3>Crop Health</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="value" style="color: var(--primary-color);">Excellent</div>
+                        <div class="label">No pests detected</div>
+                    </div>
+                </div>
+                <div class="widget">
+                    <div class="widget-header">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <h3>Yield Forecast</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="value">52 <span style="font-size: 1.2rem;">tons/ha</span></div>
+                        <div class="label">Up 5% from last cycle</div>
+                    </div>
+                </div>
+
+                <div class="widget chart-widget">
+                    <div class="widget-header">
+                        <i class="fa-solid fa-chart-area"></i>
+                        <h3>Soil Moisture Levels (Last 7 Days)</h3>
+                    </div>
+                    <div class="widget-content">
+                        <canvas id="soilMoistureChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- Sidebar Toggle ---
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggle-sidebar-btn');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+
+        // --- Chart.js Sample Chart ---
+        const ctx = document.getElementById('soilMoistureChart').getContext('2d');
+        const soilMoistureChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Soil Moisture (%)',
+                    data: [65, 59, 80, 81, 56, 55, 68],
+                    backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                    borderColor: 'rgba(76, 175, 80, 1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        suggestedMin: 40,
+                        suggestedMax: 90,
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

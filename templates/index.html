@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Link to your CSS file (I'll create this next) -->
+    <title>AICulture</title>
+    <style>
+        /* --- CSS Variables for easy theme management --- */
+        :root {
+            --primary-color: #4CAF50;
+            /* A vibrant, natural green */
+            --primary-hover-color: #45a049;
+            --secondary-color: #f4f4f4;
+            --dark-color: #333;
+            --light-color: #fff;
+            --text-color: #555;
+            --font-family: 'Montserrat', sans-serif;
+            --container-width: 1100px;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- General & Reset Styles --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-color);
+        }
+
+        h1,
+        h2,
+        h3 {
+            line-height: 1.2;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .logo .fa-leaf {
+            color: var(--primary-color);
+        }
+
+        .navbar nav ul {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar nav li {
+            margin-left: 20px;
+        }
+
+        .navbar nav a {
+            color: var(--dark-color);
+            font-weight: 600;
+            padding-bottom: 5px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--light-color);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: var(--light-color);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            background: url('https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=1974') no-repeat center center/cover;
+            color: var(--light-color);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: var(--light-color);
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* --- Features Section --- */
+        .features {
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--light-color);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background: var(--dark-color);
+            color: var(--light-color);
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .footer-content h3 {
+            color: var(--light-color);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-content a {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+
+        .footer p {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="#" class="logo">AICulture <i class="fa-solid fa-leaf"></i></a>
+            <nav>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="{{url_for('login')}}" class="btn btn-secondary">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <h1>The Future of Farming is Here</h1>
+                <p>Harnessing AI to optimize crop yields, conserve resources, and build a sustainable agricultural
+                    future.</p>
+                <a href="#features" class="btn btn-primary">Learn More</a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <h2>Why Choose AICulture?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-brain"></i>
+                        <h3>AI-Powered Insights</h3>
+                        <p>Get actionable data on soil health, weather patterns, and plant growth to make smarter
+                            decisions.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-seedling"></i>
+                        <h3>Precision Farming</h3>
+                        <p>Automate irrigation and fertilization for maximum efficiency and minimal resource waste.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-satellite-dish"></i>
+                        <h3>Remote Monitoring</h3>
+                        <p>Use drone and satellite imagery to detect pests, diseases, and nutrient deficiencies early.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <h3>Ready to revolutionize your farm?</h3>
+                <p>Contact us at <a href="mailto:contact@aiculture.com">contact@aiculture.com</a></p>
+            </div>
+            <p>&copy; 2024 AICulture. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
