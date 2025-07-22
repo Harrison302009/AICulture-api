@@ -6,8 +6,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
-import numpy as np
+import plotly.graph_objs as go
+from plotly.offline import plot
 from datetime import date
+import calendar
 
 db = SQLAlchemy()
 
@@ -118,9 +120,24 @@ def dashboard():
     if 'user_id' in session:
         today = date.today()
         month = today.month
+        months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        current_month = months[month]
         year = today.year
-        current_period = f"{month} {year}"
-        return render_template('dashboard.html', name=session['name'], temperature=init_temp, current_date=current_period)
+        current_period = f"{current_month} {year}"
+        days_count = calendar.monthrange(year, month)[1]
+        days = [str(day) for day in range(1, days_count + 1)]
+        # For plotly graph
+        # fig = go.Figure()
+        # fig.add_trace(go.Scatter(x = days, y=[81, 80, 85, 85, 83, 82, 85, 86, 87, 84, 83, 82, 81, 83, 84, 83, 82, 80, 82, 83, 82, 90], mode='lines', name='Humidity'))
+        # plotted_graph = plot(fig, output_type='div')
+        df = pd.read_csv('weather.csv')
+        df.dropna(inplace=True)
+        temperature = df['Temperature'].tolist()
+        humidity = df['Humidity'].tolist()
+        precipitation = df['Precipitation'].tolist()
+        wind = df['Wind'].tolist()
+        print(f"temperature: {temperature}")
+        return render_template('dashboard.html', name=session['name'], labels=days,  temperature=init_temp, current_date=current_period, temperature_data=temperature, humidity_data=humidity, precipitation_data=precipitation, wind_data=wind)
     else:
         print("User not logged in, redirecting to login page")
         return redirect('/login')
@@ -139,17 +156,14 @@ def weather_data():
         df = df[df['Temperature'] < 70]
         X = df[['Humidity', 'Precipitation', 'Wind']]
         y = df['Temperature']
-        scaler = StandardScaler()
-        X_scaled = scaler.fit_transform(X)
-        X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
         model = LinearRegression()
         model.fit(X_train, y_train)
         predictions = model.predict(X_test)
         mse = mean_squared_error(y_test, predictions)
-        sqrtmse = np.sqrt(mse)
         errors = predictions - y_test
         print(errors.describe())
-        rounded_mse = round(sqrtmse, 1)
+        rounded_mse = round(mse, 1)
         global init_temp
         init_temp = rounded_mse
         return redirect('/dashboard')
