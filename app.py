@@ -7,6 +7,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
 import numpy as np
+from datetime import date
 
 db = SQLAlchemy()
 
@@ -115,7 +116,11 @@ def register():
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' in session:
-        return render_template('dashboard.html', name=session['name'], temperature=init_temp)
+        today = date.today()
+        month = today.month
+        year = today.year
+        current_period = f"{month} {year}"
+        return render_template('dashboard.html', name=session['name'], temperature=init_temp, current_date=current_period)
     else:
         print("User not logged in, redirecting to login page")
         return redirect('/login')
@@ -129,7 +134,7 @@ def logout():
 @app.route('/weather_data', methods=['GET', 'POST'])
 def weather_data():
     if 'user_id' in session:
-        df = pd.read_csv('backend/weather.csv')
+        df = pd.read_csv('weather.csv')
         df.dropna(inplace=True)
         df = df[df['Temperature'] < 70]
         X = df[['Humidity', 'Precipitation', 'Wind']]
