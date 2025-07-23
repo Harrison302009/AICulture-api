@@ -5,9 +5,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
-from sklearn.preprocessing import StandardScaler
-import plotly.graph_objs as go
-from plotly.offline import plot
+# from sklearn.preprocessing import StandardScaler
+# import plotly.graph_objs as go
+# from plotly.offline import plot
 from datetime import date
 import calendar
 
@@ -163,9 +163,9 @@ def weather_data():
         mse = mean_squared_error(y_test, predictions)
         errors = predictions - y_test
         print(errors.describe())
-        rounded_mse = round(mse, 1)
+        rounded_pred = round(predictions.mean(), 1)
         global init_temp
-        init_temp = rounded_mse
+        init_temp = rounded_pred
         return redirect('/dashboard')
 
 @app.route('/crop_monitor', methods=['GET', 'POST'])
