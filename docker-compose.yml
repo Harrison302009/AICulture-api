@@ -1,8 +1,8 @@
 services:
   flask:
     restart: unless-stopped
-    volumes:
-      - .:/app
+    # volumes:
+    #   - .:/app
     build:
       context: ./
       dockerfile: Dockerfile
