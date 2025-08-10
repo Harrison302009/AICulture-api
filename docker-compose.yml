@@ -1,6 +1,8 @@
 services:
   flask:
     restart: unless-stopped
+    volumes:
+      - .:/app
     build:
       context: ./
       dockerfile: Dockerfile
@@ -13,8 +15,6 @@ services:
       - mode: ingress
         target: 5000
         published: 5000
-        volume: 
-          - .:/app
         
     healthcheck:
       test: ["CMD", "python3", "-c", "import sys, urllib.request; urllib.request.urlopen(sys.argv[1]).read()", "http://localhost:5000/"]
