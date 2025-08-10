@@ -215,7 +215,7 @@ def get_temperature():
     model = LinearRegression()
     model.fit(set1_train, set2_train)
     prediction = model.predict(set1_test)
-    mse = mean_squared_error(set2_test, prediction)
+    # mse = mean_squared_error(set2_test, prediction)
     errors = prediction - set2_test
     print(errors.describe())
     rounded_pred = round(prediction.mean(), 1)
