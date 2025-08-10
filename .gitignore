@@ -30,3 +30,7 @@ venv/
 # IDE Files
 .vscode/
 *.swp
+
+instance/
+defang/
+tests/

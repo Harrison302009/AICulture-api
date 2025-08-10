@@ -205,6 +205,21 @@ def upload_crop():
         except Exception as e:
             print(f"Error uploading crop image: {e}")
             return jsonify({"status": "error", "message": "Invalid data"}), 400
+@app.route('get_temperature', methods=['GET'])
+def get_temperature():
+    weatherfile = pd.read_csv('weather.csv')
+    weatherfile.dropna(inplace=True)
+    set1 = weatherfile[['Humidity', 'Precipitation', 'Wind']]
+    set2 = weatherfile['Temperature']
+    set1_train, set1_test, set2_train, set2_test = train_test_split(set1, set2, test_size=0.3)
+    model = LinearRegression()
+    model.fit(set1_train, set2_train)
+    prediction = model.predict(set1_test)
+    mse = mean_squared_error(set2_test, prediction)
+    errors = prediction - set2_test
+    print(errors.describe())
+    rounded_pred = round(prediction.mean(), 1)
+    return rounded_pred, 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
