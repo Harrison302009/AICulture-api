@@ -1,11 +1,20 @@
-version: '3.8'
 services:
-  web:
-    build: .
+  flask:
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    deploy:
+      resources:
+        reservations:
+          cpus: "1.0"
+          memory: 512M
     ports:
-      - "5000:5000"
-    volumes:
-      - .:/app
-    environment:
-      - FLASK_ENV=development
-    command: flask run --host=0.0.0.0
+      - mode: ingress
+        target: 5000
+        published: 5000
+        volume: 
+          - .:/app
+        
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import sys, urllib.request; urllib.request.urlopen(sys.argv[1]).read()", "http://localhost:5000/"]
